@@ -1,0 +1,38 @@
+{{define "index.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>某不可描述丁自动打卡</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+<body>
+    <div class="d-flex flex-column align-items-center">
+        <h3 class="text-secondary">修改信息直接覆盖即可</h3>
+        <form class="w-50" action="register" method="POST">
+            <div class="form-group">
+                <label for="phone">手机号</label>
+                <input class="form-control" id="phone" name="phone"/>
+                <label for="password">密码</label>
+                <input class="form-control" id="password" name="password"/>
+                <label for="description">打卡备注</label>
+                <input class="form-control" id="description" name="description" placeholder="加油 打工人！"/>
+                <label for="country">国家</label>
+                <input class="form-control" id="country" name="country" placeholder="中国"/>
+                <label for="province">省份</label>
+                <input class="form-control" id="province" name="province" placeholder="广东"/>
+                <label for="city">城市</label>
+                <input class="form-control" id="city" name="city" placeholder="广州"/>
+                <label for="address">详细地址</label>
+                <input class="form-control" id="address" name="address" placeholder="中国广东省广州市xx路xx号"/>
+                <label for="latitude">纬度（自己百度）</label>
+                <input class="form-control" id="latitude" name="latitude" placeholder="39.916527"/>
+                <label for="longitude">经度</label>
+                <input class="form-control" id="longitude" name="longitude" placeholder="116.397128"/>
+            </div>
+            <button type="submi" class="btn btn-primary w-100">录入信息</button>
+        </form>
+    </div>
+</body>
+</html>
+{{end}}
