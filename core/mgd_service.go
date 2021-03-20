@@ -1,6 +1,7 @@
 package core
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -21,13 +22,17 @@ type MgdContext struct {
 }
 
 // 请求的简单封装
-func (m MgdContext)  request(api string, requestData map[string]interface{}) (map[string]interface{}, error) {
+func (m MgdContext) request(api string, requestData map[string]interface{}) (map[string]interface{}, error) {
 	data, err := json.Marshal(requestData)
 	if err != nil {
 		return nil, err
 	}
 
-	httpClient := &http.Client{}
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
 	httpReq, _ := http.NewRequest("POST", api, strings.NewReader(string(data)))
 	httpReq.Header.Add("Content-Type", "application/json")
 	if m.Token != "" {
@@ -60,15 +65,17 @@ func (m MgdContext)  request(api string, requestData map[string]interface{}) (ma
 // 登录
 func (m *MgdContext) Login() error {
 	api := "https://api.moguding.net:9000/session/user/v1/login"
-	param := map[string]interface{} {
+	param := map[string]interface{}{
 		"loginType": "android",
-		"uuid" : uuid.NewV4().String(),
-		"phone": m.Info.Phone,
-		"password": m.Info.Password,
+		"uuid":      uuid.NewV4().String(),
+		"phone":     m.Info.Phone,
+		"password":  m.Info.Password,
 	}
 
 	respMap, err := m.request(api, param)
-	if err != nil { return err }
+	if err != nil {
+		return err
+	}
 
 	token := (respMap["data"].(map[string]interface{}))["token"].(string)
 	m.Token = token
@@ -84,17 +91,17 @@ func (m *MgdContext) Login() error {
 // 考勤
 func (m MgdContext) attendance(paramType string) error {
 	api := "https://api.moguding.net:9000/attendence/clock/v1/save"
-	param := map[string]interface{} {
-		"type": paramType,
-		"device": "Android",
-		"country": m.Info.Country,
-		"province": m.Info.Province,
-		"city": m.Info.City,
-		"address": m.Info.Address,
-		"latitude": m.Info.Latitude,
-		"longitude": m.Info.Longitude,
+	param := map[string]interface{}{
+		"type":        paramType,
+		"device":      "Android",
+		"country":     m.Info.Country,
+		"province":    m.Info.Province,
+		"city":        m.Info.City,
+		"address":     m.Info.Address,
+		"latitude":    m.Info.Latitude,
+		"longitude":   m.Info.Longitude,
 		"description": m.Info.Description,
-		"planId": m.planId,
+		"planId":      m.planId,
 	}
 	respMap, err := m.request(api, param)
 	if err != nil {
@@ -112,7 +119,7 @@ func (m MgdContext) attendance(paramType string) error {
 // 获取 PlanId
 func (m *MgdContext) getPlanId() error {
 	api := "https://api.moguding.net:9000/practice/plan/v1/getPlanByStu"
-	param := map[string]interface{} {
+	param := map[string]interface{}{
 		"statue": "",
 	}
 	respMap, err := m.request(api, param)
@@ -120,7 +127,7 @@ func (m *MgdContext) getPlanId() error {
 		return err
 	}
 
-	m.planId = respMap["data"].([]interface {})[0].(map[string]interface{})["planId"].(string)
+	m.planId = respMap["data"].([]interface{})[0].(map[string]interface{})["planId"].(string)
 	return nil
 }
 
