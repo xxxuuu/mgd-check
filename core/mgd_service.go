@@ -1,7 +1,6 @@
 package core
 
 import (
-	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -28,11 +27,7 @@ func (m MgdContext) request(api string, requestData map[string]interface{}) (map
 		return nil, err
 	}
 
-	httpClient := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		},
-	}
+	httpClient := &http.Client{}
 	httpReq, _ := http.NewRequest("POST", api, strings.NewReader(string(data)))
 	httpReq.Header.Add("Content-Type", "application/json")
 	if m.Token != "" {
