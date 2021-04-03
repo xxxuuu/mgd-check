@@ -1,7 +1,6 @@
 package task
 
 import (
-	"crypto/tls"
 	"fmt"
 	"github.com/robfig/cron"
 	"github.com/spf13/viper"
@@ -37,7 +36,6 @@ func SendEmail(to string, body string) {
 	username := viper.GetString("email.username")
 	password := viper.GetString("email.password")
 	d := gomail.NewDialer(host, port, username, password)
-	d.TLSConfig = &tls.Config{ InsecureSkipVerify: true }
 
 	if err := d.DialAndSend(m); err != nil {
 		log.Printf("给 %s 的邮件发送失败：%v\n", to, err)

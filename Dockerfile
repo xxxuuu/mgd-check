@@ -13,6 +13,7 @@ ENV TZ Asia/Shanghai
 COPY --from=builder /output/server /mgd-check/server
 WORKDIR /mgd-check/web/template/
 COPY --from=builder /go/src/mgd-check/web/template/ .
+COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 WORKDIR /mgd-check/
 EXPOSE 8080
