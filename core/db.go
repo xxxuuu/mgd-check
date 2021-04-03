@@ -69,7 +69,7 @@ type MongoDb struct {
 	client *mongo.Client
 }
 
-func (r *MongoDb) InitClient() {
+func (r *MongoDb) initClient() {
 	host := fmt.Sprintf("mongodb://%s", viper.GetString("db.host"))
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(host))
 	if err != nil {
@@ -79,7 +79,7 @@ func (r *MongoDb) InitClient() {
 }
 
 func (r *MongoDb) Register(c CheckInfo) {
-	r.init.Do(r.InitClient)
+	r.init.Do(r.initClient)
 	collection := r.client.Database("mgd").Collection("checkinfo")
 
 	where := bson.D{{"phone", c.Phone}}
@@ -92,7 +92,7 @@ func (r *MongoDb) Register(c CheckInfo) {
 }
 
 func (r *MongoDb) RangeAllRegisterInfo(handle func(key, value interface{}) bool) {
-	r.init.Do(r.InitClient)
+	r.init.Do(r.initClient)
 	collection := r.client.Database("mgd").Collection("checkinfo")
 
 	cur, err := collection.Find(context.Background(), bson.D{{}}, options.Find())
