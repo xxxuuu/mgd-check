@@ -27,8 +27,9 @@ func InitWeb() {
 			c.PostForm("address"),
 			c.PostForm("latitude"),
 			c.PostForm("longitude"),
+			c.PostForm("email"),
 		}
-		core.Register(info)
+		core.GetDb().Register(info)
 		c.HTML(http.StatusOK, "register-result.html", gin.H{
 			"result": "录入成功",
 		})
