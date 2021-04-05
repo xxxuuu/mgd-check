@@ -11,7 +11,7 @@ import (
 
 type Result struct {
 	code int
-	msg string
+	msg  string
 }
 
 const (
@@ -77,13 +77,13 @@ func workCheck(checkType int) {
 		}
 		if err != nil {
 			notice(context.Info, Result{code: FAIL, msg: fmt.Sprintf("%v", err)})
+			return true
 		}
 
 		notice(context.Info, Result{code: SUCCESS, msg: "ok"})
 		return true
 	})
 }
-
 
 func InitTask() {
 	// 上下班打卡定时任务
@@ -96,4 +96,3 @@ func InitTask() {
 	})
 	c.Start()
 }
-
